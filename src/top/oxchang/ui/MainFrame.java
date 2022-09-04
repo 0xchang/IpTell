@@ -73,7 +73,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private void initFrame() {
 		this.setSize(500, 200);
 		this.setLocationRelativeTo(null);
-		this.setTitle("IpTell   v1.0       by  0xchang");
+		this.setTitle("IpTell   v1.1       by  0xchang");
 		this.setLayout(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

@@ -2,7 +2,7 @@
 *一个实时显示出口ip和物理位置的工具*
 
 ### 使用
-*使用java8环境,下载release,双击bat运行即可*
+*将server中的python文件部署在服务器上,首次运行会生成data/config.txt文件,在文件中写入服务器地址http://ip:port/getaddr, 运行即可*
 
 
 ### 更新
