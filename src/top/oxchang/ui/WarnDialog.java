@@ -10,6 +10,15 @@ public class WarnDialog extends JDialog {
 	Font myFont = new Font("", 1, 15);
 	Font warnFont = new Font("", 1, 22);
 	JLabel myJLabel = new JLabel();
+	String content;
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public WarnDialog() {
 		this.initFrame();
@@ -18,7 +27,7 @@ public class WarnDialog extends JDialog {
 	}
 
 	private void initFrame() {
-		this.setTitle("警告:IP地址改变");
+		this.setTitle("警告!");
 		this.setLocationRelativeTo(null);
 		this.setSize(400, 200);
 		this.setAlwaysOnTop(true);
@@ -26,11 +35,18 @@ public class WarnDialog extends JDialog {
 	}
 
 	private void initImage() {
-		myJLabel.setText("警告:IP地址改变");
+		this.getContentPane().removeAll();
+		myJLabel.setText(this.content);
 		myJLabel.setBounds(100, 50, 200, 30);
 		myJLabel.setFont(warnFont);
 
 		this.getContentPane().add(myJLabel);
 
+		this.getContentPane().repaint();
+
+	}
+
+	public void myUpdate() {
+		this.initImage();
 	}
 }

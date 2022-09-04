@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import top.oxchang.ui.MainFrame;
 import top.oxchang.ui.TellFrame;
 import top.oxchang.ui.WarnDialog;
 
@@ -19,12 +20,33 @@ public class StartEvent implements Runnable {
 	String beforeip, afterip;
 	String addr;
 	URL url;
+	URL iptoaddrurl;
 	Pattern patternip = Pattern
 			.compile("((25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))");
-	Pattern patternAddr = Pattern.compile("归属地.*");
+	Pattern patterniptoaddr = Pattern.compile("(?<=(?:location\":\")).*?(?=(?:\",))");
+
 	TellFrame tl;
 	WarnDialog wd = new WarnDialog();
 	String myproxy;
+	String apiDefaultString = "https://sp1.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=%s&resource_id=5809";
+	boolean runflag = true;
+	MainFrame mf;
+
+	public MainFrame getMf() {
+		return mf;
+	}
+
+	public void setMf(MainFrame mf) {
+		this.mf = mf;
+	}
+
+	public TellFrame getTl() {
+		return tl;
+	}
+
+	public void setTl(TellFrame tl) {
+		this.tl = tl;
+	}
 
 	public String getMyproxy() {
 		return myproxy;
@@ -51,16 +73,21 @@ public class StartEvent implements Runnable {
 				afterip = this.Urlconn();
 				this.Result();
 				Thread.sleep(2500);
+				if (!this.runflag) {
+					break;
+				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		this.tl.dispose();
+		System.out.println("线程结束");
 	}
 
 	public void start() {
 		// TODO Auto-generated method stub
+		System.out.println("线程开始");
 		if (!this.myproxy.equals("")) {
 			String[] res = myproxy.split(":");
 			System.setProperty("http.proxyHost", res[0]);
@@ -79,10 +106,11 @@ public class StartEvent implements Runnable {
 			t1 = new Thread(this);
 			t1.start();
 		}
-		tl = new TellFrame(beforeip);
+		// tl = new TellFrame(beforeip);
 	}
 
 	private String Urlconn() {
+		// System.out.println("here urlconn");
 
 		URLConnection conn = null;
 		try {
@@ -113,12 +141,14 @@ public class StartEvent implements Runnable {
 				while ((line = br.readLine()) != null) {
 					// System.out.println(line);
 					Matcher mip = patternip.matcher(line);
-					Matcher maddr = patternAddr.matcher(line);
+					Matcher maddr = patterniptoaddr.matcher(line);
 					if (mip.find()) {
 						result = mip.group();
 					}
 					if (maddr.find()) {
-						tl.setAddr(maddr.group());
+						String chiStr;
+						chiStr = UnicodeDecode.decode(maddr.group());
+						this.tl.setAddr(chiStr);
 					}
 				}
 				// System.out.println(result + addr);
@@ -148,8 +178,27 @@ public class StartEvent implements Runnable {
 	}
 
 	private boolean Result() {
+		if (afterip == null) {
+			// 如果连接异常导致，结束线程
+			this.runflag = false;
+			this.tl.setAddr("");
+			this.tl.setIpaddr("");
+			wd.setContent("无法连接到目标服务器");
+			wd.myUpdate();
+			wd.setVisible(true);
 
-		if (beforeip != null && !beforeip.equals(afterip)) {
+			// 修改主窗口属性值,弹出主窗口
+			this.mf.getStartbtn().setText("运行");
+			this.mf.setVisible(true);
+		} else if (beforeip == null) {
+			// 初始化ip
+			beforeip = afterip;
+			tl.setIpaddr(beforeip);
+			tl.Show();
+		} else if (!beforeip.equals(afterip)) {
+			// 判断ip是否相等
+			wd.setContent("IP地址发生改变");
+			wd.myUpdate();
 			wd.setVisible(true);
 		}
 

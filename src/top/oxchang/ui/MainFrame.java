@@ -10,20 +10,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import top.oxchang.util.ReadConfig;
 import top.oxchang.util.StartEvent;
 import top.oxchang.util.SystemProxy;
 
 public class MainFrame extends JFrame implements ActionListener {
 
 	String testUrl;
-	JLabel iptext = new JLabel("httpbin网址");
-	JTextField ipField = new JTextField("https://ip.tool.lu/");
+	JLabel iptext = new JLabel("server网址");
+
+	JTextField ipField = new JTextField("");
 	JLabel proxytext = new JLabel("代理");
 	JTextField proxyField = new JTextField();
 
@@ -31,13 +34,32 @@ public class MainFrame extends JFrame implements ActionListener {
 	JButton exitbtn = new JButton("退出");
 	JButton sysprobtn = new JButton("使用系统代理");
 
+	public JButton getStartbtn() {
+		return startbtn;
+	}
+
 	Font myfont = new Font("", 0, 16);
+
+	TellFrame tl = new TellFrame("");
 
 	public MainFrame() {
 		this.initFrame();
+		this.initData();
 		this.initImage();
 
 		this.setVisible(true);
+	}
+
+	private void initData() {
+		// TODO Auto-generated method stub
+		String s = null;
+		try {
+			s = ReadConfig.getUrl();
+			ipField.setText(s);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getTestUrl() {
@@ -135,6 +157,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			StartEvent s = new StartEvent();
 			s.setMyproxy(proxyField.getText());
 			s.setIpaddr(testUrl);
+			s.setTl(this.tl);
+			s.setMf(this);
 			s.start();
 
 			startbtn.setText("运行中");

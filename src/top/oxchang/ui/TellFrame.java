@@ -27,7 +27,7 @@ public class TellFrame extends JDialog {
 		this.initFrame();
 		this.initData();
 		this.initImage();
-		this.setVisible(true);
+		this.setVisible(false);
 	}
 
 	public String getIpaddr() {
@@ -39,11 +39,11 @@ public class TellFrame extends JDialog {
 	}
 
 	private void initData() {
-		this.jLabelipaddr = new JLabel(this.ipaddr);
-		this.jLabelipaddr2 = new JLabel(this.addr);
+		this.jLabelipaddr = new JLabel(this.ipaddr, JLabel.CENTER);
+		this.jLabelipaddr2 = new JLabel(this.addr, JLabel.CENTER);
 
-		this.jLabelipaddr.setBounds(20, 5, 200, 15);
-		this.jLabelipaddr2.setBounds(20, 20, 200, 15);
+		this.jLabelipaddr.setBounds(0, 10, 220, 15);
+		this.jLabelipaddr2.setBounds(1, 50, 220, 15);
 
 		jLabelipaddr.setFont(myfont);
 		jLabelipaddr2.setFont(myfont);
@@ -51,7 +51,7 @@ public class TellFrame extends JDialog {
 	}
 
 	private void initFrame() {
-		this.setSize(220, 110);
+		this.setSize(220, 130);
 		this.setLocation(1500, 100);
 		this.setTitle("IPµÿ÷∑");
 		this.setAlwaysOnTop(true);
@@ -71,6 +71,7 @@ public class TellFrame extends JDialog {
 		jLabelipaddr.setText(this.ipaddr);
 		jLabelipaddr2.setText(this.addr);
 		this.initImage();
+		this.setVisible(true);
 	}
 
 	public void Hide() {

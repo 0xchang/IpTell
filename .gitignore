@@ -1,0 +1,5 @@
+*.zip
+IpTell/*
+/bin/*
+/data/*
+/bin/
