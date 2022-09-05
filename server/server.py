@@ -22,7 +22,7 @@ def getaddr():
         myvalue = requests.get(url=url, headers=headers).text
         database.insert(remote_ip, time.time(), myvalue=myvalue)
         return myvalue
-    elif int(time.time()) - (result[0][1]) > 5:
+    elif int(time.time()) - (result[0][1]) > 24*3600:
         # 更新数据并返回
         myvalue = requests.get(url=url, headers=headers).text
         database.update(remote_ip, time.time(), myvalue=myvalue)
