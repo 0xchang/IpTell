@@ -3,3 +3,4 @@ IpTell/*
 /bin/*
 /data/*
 *.jar
+*.db
